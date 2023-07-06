@@ -23,7 +23,7 @@ Content-Type: application/json
   "question": "question",
   "answer": "answer",
   "bucket": 1,
-  "lastViewDate": "lastViewDate",
+  "lastViewDate": "{{$isoTimestamp}}",
   "deckId": "{{deckId}}"
 }
 

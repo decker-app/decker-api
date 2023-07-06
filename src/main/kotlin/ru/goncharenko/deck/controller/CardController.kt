@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.goncharenko.deck.service.CardService
+import java.time.Instant
 
 @RestController
 @RequestMapping("api/cards")
@@ -24,7 +25,7 @@ data class CreateCardDTO(
     @JsonProperty("bucket")
     val bucket: Int,
     @JsonProperty("lastViewDate")
-    val lastViewDate: String,
+    val lastViewDate: Instant,
     @JsonProperty("deckId")
     val deckId: String,
 )

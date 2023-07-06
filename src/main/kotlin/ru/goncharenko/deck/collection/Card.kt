@@ -1,6 +1,7 @@
 package ru.goncharenko.deck.collection
 
 import org.springframework.data.mongodb.core.mapping.*
+import java.time.Instant
 import java.util.*
 
 @Document("card")
@@ -14,7 +15,7 @@ data class Card(
     @Field("bucket")
     val bucket: Int,
     @Field("lastViewDate")
-    val lastViewDate: String,
+    val lastViewDate: Instant,
     @Field("deckId")
     val deckId: String,
 )
