@@ -1,12 +1,12 @@
 package ru.goncharenko.deck.collection
 
-import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.mapping.*
+import java.util.*
 
 @Document("card")
 data class Card(
     @MongoId
-    val cardId: ObjectId = ObjectId(),
+    val cardId: String = UUID.randomUUID().toString(),
     @Field("question")
     val question: String,
     @Field("answer")
@@ -16,5 +16,5 @@ data class Card(
     @Field("lastViewDate")
     val lastViewDate: String,
     @Field("deckId")
-    val deckId: ObjectId
+    val deckId: String,
 )
