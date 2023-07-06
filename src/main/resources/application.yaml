@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+springdoc:
+  show-actuator: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  server:
+    port: 1${server.port}
