@@ -11,3 +11,8 @@ management:
         include: "*"
   server:
     port: 1${server.port}
+
+spring:
+  data:
+    mongodb:
+      auto-index-creation: true

@@ -6,7 +6,7 @@ import ru.goncharenko.deck.service.DeckService
 import java.time.Instant
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/v1")
 class CardController(
     private val deckService: DeckService,
 ) {
