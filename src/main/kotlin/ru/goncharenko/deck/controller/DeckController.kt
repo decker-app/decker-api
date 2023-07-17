@@ -12,7 +12,7 @@ class CardController(
 ) {
     @PostMapping("decks")
     fun createDeck(
-        @RequestBody dto: CreateDeckDTO
+        @RequestBody dto: CreateDeckDTO,
     ) = deckService.createDeck(dto)
 
     @PostMapping("decks/{deckId}/cards")
@@ -29,7 +29,7 @@ class CardController(
 
     @GetMapping("decks/{deckId}/cards")
     fun getCardsByDeckId(
-        @PathVariable deckId: String
+        @PathVariable deckId: String,
     ) = deckService.getCardsFromDeck(deckId)
 }
 

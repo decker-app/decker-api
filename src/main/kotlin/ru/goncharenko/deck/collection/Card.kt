@@ -2,7 +2,6 @@ package ru.goncharenko.deck.collection
 
 import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.mapping.*
-import ru.goncharenko.deck.controller.CardDTO
 import java.time.Instant
 import java.util.*
 
