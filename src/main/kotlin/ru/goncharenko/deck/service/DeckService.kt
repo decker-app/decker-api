@@ -74,7 +74,7 @@ class DeckService(
     }
 
     private fun Card.toDTO() = CardDTO(
-        cardId = cardId,
+        id = cardId.toHexString(),
         question = question,
         answer = answer,
         bucket = bucket,
@@ -83,6 +83,7 @@ class DeckService(
     )
 
     private fun Deck.toDTO() = DeckDTO(
+        id = deckId.toHexString(),
         name = name,
         theme = theme
     )

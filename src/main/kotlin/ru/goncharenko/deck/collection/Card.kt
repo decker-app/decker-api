@@ -1,8 +1,10 @@
 package ru.goncharenko.deck.collection
 
+import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.mapping.*
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 @Document("card")
@@ -13,15 +15,16 @@ import java.util.*
 )
 data class Card(
     @MongoId
-    val cardId: String = UUID.randomUUID().toString(),
+    val cardId: ObjectId = ObjectId(),
     @Field("question")
     val question: String,
     @Field("answer")
     val answer: String,
     @Field("bucket")
     val bucket: Int = 1,
+    // solve issue with Instant.MIN
     @Field("lastViewDate")
-    val lastViewDate: Instant = Instant.now(),
+    val lastViewDate: Instant = Instant.now().minus(1, ChronoUnit.DAYS),
     @Field("deckId")
     val deckId: String,
 )

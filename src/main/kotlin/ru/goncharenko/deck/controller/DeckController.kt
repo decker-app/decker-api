@@ -41,8 +41,8 @@ data class AddCardDTO(
 )
 
 data class CardDTO(
-    @JsonProperty("cardId")
-    val cardId: String,
+    @JsonProperty("id")
+    val id: String,
     @JsonProperty("question")
     val question: String,
     @JsonProperty("answer")
@@ -63,6 +63,8 @@ data class CreateDeckDTO(
 )
 
 data class DeckDTO(
+    @JsonProperty("id")
+    val id: String,
     @JsonProperty("name")
     val name: String,
     @JsonProperty("theme")

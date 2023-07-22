@@ -1,5 +1,6 @@
 package ru.goncharenko.deck.collection
 
+import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
@@ -9,7 +10,7 @@ import java.util.*
 @Document("deck")
 data class Deck(
     @MongoId
-    val deckId: String = UUID.randomUUID().toString(),
+    val deckId: ObjectId = ObjectId(),
     @Field("theme")
     val theme: String,
     @Field("name")
