@@ -15,6 +15,11 @@ class CardController(
         @RequestBody dto: CreateDeckDTO,
     ) = deckService.createDeck(dto)
 
+    @GetMapping("decks/{deckId}")
+    fun getDeckInfo(
+        @PathVariable deckId: String
+    ) = deckService.getDeckInfo(deckId)
+
     @PostMapping("decks/{deckId}/cards")
     fun addCardToDeck(
         @PathVariable deckId: String,
@@ -69,4 +74,6 @@ data class DeckDTO(
     val name: String,
     @JsonProperty("theme")
     val theme: String,
+    @JsonProperty("userId")
+    val userId: String,
 )

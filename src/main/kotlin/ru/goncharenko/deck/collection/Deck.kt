@@ -11,9 +11,14 @@ import java.util.*
 data class Deck(
     @MongoId
     val deckId: ObjectId = ObjectId(),
+
     @Field("theme")
     val theme: String,
+
     @Field("name")
     @Indexed(unique = true)
     val name: String,
+
+    @Field("userId")
+    val userId: ObjectId = ObjectId(),
 )

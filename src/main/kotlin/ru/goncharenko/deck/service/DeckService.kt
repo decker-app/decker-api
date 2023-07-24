@@ -9,6 +9,8 @@ import ru.goncharenko.deck.controller.CardDTO
 import ru.goncharenko.deck.controller.CreateDeckDTO
 import ru.goncharenko.deck.controller.DeckDTO
 import ru.goncharenko.deck.dao.DeckDao
+import ru.goncharenko.deck.exception.CardNotFoundException
+import ru.goncharenko.deck.exception.DeckNotFoundException
 
 
 @Service
@@ -25,13 +27,13 @@ class DeckService(
             )
         )
 
-        logger.info("Finish saving Deck = $dto")
+        logger.trace("Finish saving Deck = {}", dto)
         return savedDeck.toDTO()
     }
 
     fun addCard(deckId: String, dto: AddCardDTO): CardDTO {
         logger.trace("Start saving Card = {} to Deck with id={}", dto, deckId)
-        require(deckDao.isDeckExist(deckId)) { "Deck with deckId=${deckId} not exist" }
+        if (!deckDao.isDeckExist(deckId)) throw DeckNotFoundException("Deck with id=$deckId not found")
 
         val savedCard = deckDao.saveCard(
             Card(
@@ -41,32 +43,39 @@ class DeckService(
             )
         )
 
-        logger.info("Finished saving Card = $dto to Deck with id=$deckId")
+        logger.trace("Finished saving Card = {} to Deck with id={}", dto, deckId)
         return savedCard.toDTO()
     }
 
     fun getCardsFromDeck(deckId: String): List<CardDTO> {
         logger.trace("Start collecting Cards from Deck with id=$deckId")
-        require(deckDao.isDeckExist(deckId)) { "Deck with deckId=${deckId} not exist" }
+        if (!deckDao.isDeckExist(deckId)) throw DeckNotFoundException("Deck with id=$deckId not found")
 
         val cardList = deckDao.findCardsBy(deckId = deckId)
 
-        logger.info("Finished collecting Cards from Deck with id=$deckId")
+        logger.trace("Finished collecting Cards from Deck with id=$deckId")
         return cardList.map { card -> card.toDTO() }
     }
 
 
-    fun getCardFromDeck(deckId: String, cardId: String): CardDTO? {
+    fun getCardFromDeck(deckId: String, cardId: String): CardDTO {
         logger.trace("Start finding Card with id=$cardId from Deck with id=$deckId")
-        require(deckDao.isDeckExist(deckId)) { "Deck with deckId=${deckId} not exist" }
+        if (!deckDao.isDeckExist(deckId)) throw DeckNotFoundException("Deck with id=$deckId not found")
 
         val card = deckDao.findCardBy(
             deckId = deckId,
             cardId = cardId
-        )
+        ) ?: throw CardNotFoundException("Card with cardId=$cardId, deckId=$deckId not found")
 
-        logger.info("Finished finding Card with id=$cardId from Deck with id=$deckId")
-        return card?.toDTO()
+        logger.trace("Finished finding Card with id=$cardId from Deck with id=$deckId")
+        return card.toDTO()
+    }
+
+    fun getDeckInfo(deckId: String): DeckDTO {
+        logger.trace("Start finding Deck with id=$deckId")
+        val deck = deckDao.findDeckBy(deckId) ?: throw DeckNotFoundException("Deck with id=$deckId not found")
+        logger.trace("Finish finding Deck with id=$deckId")
+        return deck.toDTO()
     }
 
     companion object {
@@ -85,6 +94,7 @@ class DeckService(
     private fun Deck.toDTO() = DeckDTO(
         id = deckId.toHexString(),
         name = name,
-        theme = theme
+        theme = theme,
+        userId = userId.toHexString(),
     )
 }
