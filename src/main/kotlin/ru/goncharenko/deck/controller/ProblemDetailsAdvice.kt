@@ -26,7 +26,7 @@ class ProblemDetailsAdvice : ResponseEntityExceptionHandler() {
     @ExceptionHandler(CardNotFoundException::class)
     fun handleCardNotFoundException(
         request: HttpServletRequest,
-        ex: ResourceNotFoundException,
+        ex: CardNotFoundException,
     ) = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message!!).apply {
         title = "Card not found"
         type = URI.create("problems/resource-not-found/card")
@@ -35,7 +35,7 @@ class ProblemDetailsAdvice : ResponseEntityExceptionHandler() {
     @ExceptionHandler(DeckNotFoundException::class)
     fun handleDeckNotFoundException(
         request: HttpServletRequest,
-        ex: ResourceNotFoundException,
+        ex: DeckNotFoundException,
     ) = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message!!).apply {
         title = "Deck not found"
         type = URI.create("problems/resource-not-found/deck")
