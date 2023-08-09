@@ -1,4 +1,4 @@
-package ru.goncharenko.deck.controller
+package ru.goncharenko.deck.infra
 
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
