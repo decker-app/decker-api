@@ -19,3 +19,15 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://127.0.0.1:8888/realms/decker
+
+local-controller:
+  enabled: true
+
+cors:
+  allowed-origins: "*"
+  allowed-methods: "*"
