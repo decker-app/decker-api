@@ -3,6 +3,10 @@ server:
 
 springdoc:
   show-actuator: true
+  swagger-ui:
+    oauth:
+      realm: decker
+      client-id: decker_api
 
 management:
   endpoints:
@@ -31,3 +35,4 @@ local-controller:
 cors:
   allowed-origins: "*"
   allowed-methods: "*"
+  allowed-headers: "Authorization"

@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
@@ -21,6 +22,9 @@ class WebSecurityConfig {
             }
             cors { }
             authorizeRequests {
+                authorize("/v3/api-docs/**", permitAll)
+                authorize("/swagger-ui/**", permitAll)
+                authorize("/swagger-ui.html", permitAll)
                 authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer {
@@ -31,9 +35,10 @@ class WebSecurityConfig {
     }
 
     @Bean
-    fun corsConfigurationSource(properties: CorsProperties) =
+    fun corsConfigurationSource(properties: CorsProperties): CorsConfigurationSource =
         UrlBasedCorsConfigurationSource().apply {
             registerCorsConfiguration("/**", CorsConfiguration().apply {
+                allowedHeaders = properties.allowedHeaders
                 allowedOrigins = properties.allowedOrigins
                 allowedMethods = properties.allowedMethods
             })
@@ -44,4 +49,5 @@ class WebSecurityConfig {
 data class CorsProperties(
     val allowedOrigins: List<String>,
     val allowedMethods: List<String>,
+    val allowedHeaders: List<String>,
 )
