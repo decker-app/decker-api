@@ -19,10 +19,33 @@ class DeckDao(
         Deck::class.java
     )
 
+    fun isDeckExist(
+        deckId: String,
+        userId: String,
+    ) = mongoOperations.exists(
+        Query(
+            Criteria().andOperator(
+                Deck::deckId isEqualTo deckId,
+                Deck::userId isEqualTo userId,
+            )
+        ),
+        Deck::class.java
+    )
+
     fun findDeckBy(deckId: String) = mongoOperations.findOne(
         Query(
             Criteria().andOperator(
                 Deck::deckId isEqualTo deckId,
+            )
+        ),
+        Deck::class.java
+    )
+
+    fun findDeckBy(deckId: String, userId: String) = mongoOperations.findOne(
+        Query(
+            Criteria().andOperator(
+                Deck::deckId isEqualTo deckId,
+                Deck::userId isEqualTo userId,
             )
         ),
         Deck::class.java

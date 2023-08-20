@@ -17,13 +17,14 @@ import ru.goncharenko.deck.exception.DeckNotFoundException
 class DeckService(
     private val deckDao: DeckDao,
 ) {
-    fun createDeck(dto: CreateDeckDTO): DeckDTO {
+    fun createDeck(dto: CreateDeckDTO, userId: String): DeckDTO {
         logger.trace("Start saving Deck = {}", dto)
 
         val savedDeck = deckDao.saveDeck(
             Deck(
                 name = dto.name,
                 theme = dto.theme,
+                userId = userId,
             )
         )
 
@@ -78,6 +79,11 @@ class DeckService(
         return deck.toDTO()
     }
 
+    fun securityCheck(
+        deckId: String,
+        userId: String,
+    ) = deckDao.isDeckExist(deckId, userId)
+
     companion object {
         val logger = LoggerFactory.getLogger(DeckService::class.java)
     }
@@ -95,6 +101,6 @@ class DeckService(
         id = deckId.toHexString(),
         name = name,
         theme = theme,
-        userId = userId.toHexString(),
+        userId = userId,
     )
 }
