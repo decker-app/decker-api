@@ -30,15 +30,15 @@ class DeckService(
         return savedDeck.toDTO()
     }
 
-    fun updateDeck(deckId: String, dto: UpdateDeckDTO): DeckDTO? {
+    fun updateDeck(deckId: String, dto: UpdateDeckDTO): DeckDTO {
         logger.trace("Start updating Deck = {}", dto)
 
         val updatedDeckDTO = deckDao.findAndUpdateDeck(
             deckId, dto
-        )
+        ) ?: throw DeckNotFoundException("Deck with this id not found")
 
         logger.trace("Finish updating Deck = {}", dto)
-        return updatedDeckDTO?.toDTO()
+        return updatedDeckDTO.toDTO()
     }
 
     fun addCard(deckId: String, dto: AddCardDTO): CardDTO {
@@ -57,15 +57,15 @@ class DeckService(
         return savedCard.toDTO()
     }
 
-    fun updateCard(cardId: String, dto: UpdateCardDTO): CardDTO? {
+    fun updateCard(cardId: String, dto: UpdateCardDTO): CardDTO {
         logger.trace("Start updating Card = {}", dto)
 
         val updatedDeckDTO = deckDao.findAndUpdateCard(
             cardId, dto
-        )
+        ) ?: throw CardNotFoundException("Card with this id not found")
 
         logger.trace("Finish updating Card = {}", dto)
-        return updatedDeckDTO?.toDTO()
+        return updatedDeckDTO.toDTO()
     }
 
     fun getCardsFromDeck(deckId: String): List<CardDTO> {
