@@ -1,12 +1,16 @@
 package ru.goncharenko.deck.dao
 
+import org.springframework.data.mongodb.core.FindAndModifyOptions
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Service
 import ru.goncharenko.deck.collection.Card
 import ru.goncharenko.deck.collection.Deck
+import ru.goncharenko.deck.controller.UpdateCardDTO
+import ru.goncharenko.deck.controller.UpdateDeckDTO
 
 
 @Service
@@ -49,6 +53,29 @@ class DeckDao(
             )
         ),
         Deck::class.java
+    )
+
+    fun findAndUpdateDeck(deckId: String, deckDto: UpdateDeckDTO) = mongoOperations.findAndModify(
+        Query(
+            Deck::deckId isEqualTo deckId,
+        ),
+        Update()
+            .set(Deck::name.name, deckDto.name)
+            .set(Deck::theme.name, deckDto.theme),
+        FindAndModifyOptions.options().returnNew(true),
+        Deck::class.java
+    )
+
+
+    fun findAndUpdateCard(cardId: String, cardDTO: UpdateCardDTO) = mongoOperations.findAndModify(
+        Query(
+            Card::cardId isEqualTo cardId,
+        ),
+        Update()
+            .set(Card::question.name, cardDTO.question)
+            .set(Card::answer.name, cardDTO.answer),
+        FindAndModifyOptions.options().returnNew(true),
+        Card::class.java
     )
 
     fun findCardBy(deckId: String, cardId: String) = mongoOperations.findOne(

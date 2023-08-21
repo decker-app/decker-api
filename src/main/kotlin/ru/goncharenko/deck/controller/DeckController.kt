@@ -23,6 +23,13 @@ class CardController(
         @AuthenticationPrincipal jwt: Jwt,
     ) = deckService.createDeck(dto, jwt.subject)
 
+    @PutMapping("decks/{deckId}")
+    @PreAuthorize("@deckService.securityCheck(#deckId, authentication.name)")
+    fun updateDeck(
+        @PathVariable deckId: String,
+        @RequestBody dto: UpdateDeckDTO,
+    ) = deckService.updateDeck(deckId, dto)
+
     @GetMapping("decks/{deckId}")
     @PreAuthorize("@deckService.securityCheck(#deckId, authentication.name)")
     fun getDeckInfo(
@@ -35,6 +42,14 @@ class CardController(
         @PathVariable deckId: String,
         @RequestBody dto: AddCardDTO,
     ) = deckService.addCard(deckId, dto)
+
+    @PutMapping("decks/{deckId}/card/{cardId}")
+    @PreAuthorize("@deckService.securityCheck(#deckId, authentication.name)")
+    fun updateCard(
+        @PathVariable deckId: String,
+        @PathVariable cardId: String,
+        @RequestBody dto: UpdateCardDTO,
+    ) = deckService.updateCard(cardId, dto)
 
     @GetMapping("decks/{deckId}/cards/{cardId}")
     @PreAuthorize("@deckService.securityCheck(#deckId, authentication.name)")
@@ -118,6 +133,18 @@ data class DeckDTO(
     val name: String,
     @JsonProperty("theme")
     val theme: String,
-    @JsonProperty("userId")
-    val userId: String,
+)
+
+data class UpdateDeckDTO(
+    @JsonProperty("name")
+    val name: String,
+    @JsonProperty("theme")
+    val theme: String,
+)
+
+data class UpdateCardDTO(
+    @JsonProperty("question")
+    val question: String,
+    @JsonProperty("answer")
+    val answer: String,
 )

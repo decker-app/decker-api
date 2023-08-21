@@ -5,10 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import ru.goncharenko.deck.collection.Card
 import ru.goncharenko.deck.collection.Deck
-import ru.goncharenko.deck.controller.AddCardDTO
-import ru.goncharenko.deck.controller.CardDTO
-import ru.goncharenko.deck.controller.CreateDeckDTO
-import ru.goncharenko.deck.controller.DeckDTO
+import ru.goncharenko.deck.controller.*
 import ru.goncharenko.deck.dao.DeckDao
 import ru.goncharenko.deck.exception.CardNotFoundException
 import ru.goncharenko.deck.exception.DeckNotFoundException
@@ -33,6 +30,17 @@ class DeckService(
         return savedDeck.toDTO()
     }
 
+    fun updateDeck(deckId: String, dto: UpdateDeckDTO): DeckDTO? {
+        logger.trace("Start updating Deck = {}", dto)
+
+        val updatedDeckDTO = deckDao.findAndUpdateDeck(
+            deckId, dto
+        )
+
+        logger.trace("Finish updating Deck = {}", dto)
+        return updatedDeckDTO?.toDTO()
+    }
+
     fun addCard(deckId: String, dto: AddCardDTO): CardDTO {
         logger.trace("Start saving Card = {} to Deck with id={}", dto, deckId)
         if (!deckDao.isDeckExist(deckId)) throw DeckNotFoundException("Deck with id=$deckId not found")
@@ -47,6 +55,17 @@ class DeckService(
 
         logger.trace("Finished saving Card = {} to Deck with id={}", dto, deckId)
         return savedCard.toDTO()
+    }
+
+    fun updateCard(cardId: String, dto: UpdateCardDTO): CardDTO? {
+        logger.trace("Start updating Card = {}", dto)
+
+        val updatedDeckDTO = deckDao.findAndUpdateCard(
+            cardId, dto
+        )
+
+        logger.trace("Finish updating Card = {}", dto)
+        return updatedDeckDTO?.toDTO()
     }
 
     fun getCardsFromDeck(deckId: String): List<CardDTO> {
@@ -120,6 +139,5 @@ class DeckService(
         id = deckId.toHexString(),
         name = name,
         theme = theme,
-        userId = userId,
     )
 }
