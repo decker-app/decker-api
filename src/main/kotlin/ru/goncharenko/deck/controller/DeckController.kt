@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
 import ru.goncharenko.deck.service.DeckService
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 // TODO: Better use AuthenticationPrincipal over @PreAuthorize
 @RestController
@@ -47,6 +48,38 @@ class CardController(
     fun getCardsByDeckId(
         @PathVariable deckId: String,
     ) = deckService.getCardsFromDeck(deckId)
+
+    @GetMapping("decks/{deckId}/session")
+    @PreAuthorize("@deckService.securityCheck(#deckId, authentication.name)")
+    fun getCurrentSessionCards(
+        @PathVariable deckId: String,
+    ): List<CardDTO> {
+        return deckService.getCardsFromDeck(deckId)
+            .filter { card ->
+                ChronoUnit.DAYS.between(card.lastViewDate, Instant.now()) >= card.bucket
+            }
+    }
+
+    @PostMapping("decks/{deckId}/session/submit")
+    @PreAuthorize("@deckService.securityCheck(#deckId, authentication.name)")
+    fun submitCard(
+        @RequestParam isSuccessful: Boolean,
+        @RequestParam cardId: String,
+        @PathVariable deckId: String,
+    ): CardDTO {
+        val card = deckService.getCardFromDeck(deckId, cardId)
+        val newBucket = if (isSuccessful) {
+            if (card.bucket > 6) card.bucket else card.bucket + 1
+        } else {
+            if (card.bucket < 2) card.bucket else card.bucket - 1
+        }
+        return deckService.updateCard(
+            card.copy(
+                bucket = newBucket,
+                lastViewDate = Instant.now(),
+            )
+        )
+    }
 }
 
 data class AddCardDTO(

@@ -1,5 +1,6 @@
 package ru.goncharenko.deck.service
 
+import org.bson.types.ObjectId
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import ru.goncharenko.deck.collection.Card
@@ -79,6 +80,15 @@ class DeckService(
         return deck.toDTO()
     }
 
+    fun updateCard(cardDTO: CardDTO): CardDTO {
+        logger.trace("Start updating Card with id=${cardDTO.id} from Deck with id=${cardDTO.deckId}")
+
+        val card = deckDao.saveCard(cardDTO.toDocument())
+
+        logger.trace("Finished updating Card with id=${cardDTO.id} from Deck with id=${cardDTO.deckId}")
+        return card.toDTO()
+    }
+
     fun securityCheck(
         deckId: String,
         userId: String,
@@ -90,6 +100,15 @@ class DeckService(
 
     private fun Card.toDTO() = CardDTO(
         id = cardId.toHexString(),
+        question = question,
+        answer = answer,
+        bucket = bucket,
+        lastViewDate = lastViewDate,
+        deckId = deckId
+    )
+
+    private fun CardDTO.toDocument() = Card(
+        cardId = ObjectId(id),
         question = question,
         answer = answer,
         bucket = bucket,
