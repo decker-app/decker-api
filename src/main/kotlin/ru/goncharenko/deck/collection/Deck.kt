@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId
 
 @Document("deck")
 @CompoundIndex(
-    name = "unique_question_in_deck",
+    name = "unique_deck_name_by_user",
     def = "{'name' : 1, 'userId' : 1}",
     unique = true,
 )
